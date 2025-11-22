@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyLink - Modern URL Shortener</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-decoration">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+    </div>
+
+    <!-- Header with Gradient -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🔗</div>
+                    <div>
+                        <h1>TinyLink</h1>
+                        <p class="tagline">Shorten. Share. Track.</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <span class="stat-number" id="totalLinks">0</span>
+                        <span class="stat-label">Links</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-number" id="totalClicks">0</span>
+                        <span class="stat-label">Clicks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section with Form -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <div class="hero-header">
+                    <h2 class="hero-title">
+                        <span class="gradient-text">Create Your Short Link</span>
+                    </h2>
+                    <p class="hero-subtitle">Transform long URLs into short, memorable links in seconds</p>
+                </div>
+
+                <form id="addLinkForm" class="url-form">
+                    <div class="form-container">
+                        <div class="input-group primary-input">
+                            <div class="input-icon">🌐</div>
+                            <input 
+                                type="url" 
+                                id="targetUrl" 
+                                name="targetUrl" 
+                                placeholder="Paste your long URL here..." 
+                                required
+                                class="main-input"
+                            >
+                        </div>
+                        <span class="error-message" id="urlError"></span>
+                        
+                        <div class="advanced-toggle">
+                            <button type="button" class="toggle-btn" id="advancedToggle">
+                                <span>⚙️ Custom Short Code</span>
+                                <span class="toggle-icon">▼</span>
+                            </button>
+                        </div>
+
+                        <div class="advanced-options" id="advancedOptions" style="display: none;">
+                            <div class="input-group">
+                                <div class="input-icon">✨</div>
+                                <input 
+                                    type="text" 
+                                    id="customCode" 
+                                    name="customCode" 
+                                    placeholder="custom-code (6-8 characters)"
+                                    pattern="[A-Za-z0-9]{6,8}"
+                                    maxlength="8"
+                                    class="custom-input"
+                                >
+                            </div>
+                            <span class="help-text">💡 Leave empty for auto-generated code</span>
+                            <span class="error-message" id="codeError"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-hero" id="submitBtn">
+                            <span class="btn-text">Generate Short Link</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Success Message with Animation -->
+                <div id="successMessage" class="success-card" style="display: none;">
+                    <div class="success-icon">✓</div>
+                    <div class="success-content">
+                        <h3>Link Created Successfully!</h3>
+                        <div class="short-link-display">
+                            <a id="shortLinkUrl" href="#" target="_blank"></a>
+                        </div>
+                        <div class="success-actions">
+                            <button class="btn-copy-modern" id="copyBtn">
+                                <span>📋</span> Copy Link
+                            </button>
+                            <button class="btn-share" id="shareBtn">
+                                <span>🔗</span> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Cards -->
+            <div class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-content">
+                        <h3>Lightning Fast</h3>
+                        <p>Generate links instantly</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3>Track Clicks</h3>
+                        <p>Monitor your link performance</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔒</div>
+                    <div class="stat-content">
+                        <h3>Secure & Reliable</h3>
+                        <p>Your links are safe with us</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search your links by code or URL..."
+                    class="search-input-modern"
+                >
+                <div class="search-decoration"></div>
+            </div>
+        </section>
+
+        <!-- Links Table Section -->
+        <section class="links-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-icon">📎</span>
+                    Your Links
+                </h2>
+                <div class="section-actions">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="recent">Recent</button>
+                    <button class="filter-btn" data-filter="popular">Popular</button>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-modern">
+                <div class="loading-spinner"></div>
+                <p>Loading your links...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state-modern" style="display: none;">
+                <div class="empty-illustration">
+                    <div class="empty-icon">🎯</div>
+                    <div class="empty-sparkles">
+                        <span class="sparkle">✨</span>
+                        <span class="sparkle">✨</span>
+                        <span class="sparkle">✨</span>
+                    </div>
+                </div>
+                <h3>No Links Yet</h3>
+                <p>Create your first short link above to get started!</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state-modern" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <h3>Oops! Something went wrong</h3>
+                <p>Failed to load your links. Please try again.</p>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>🔄</span> Retry
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div id="tableContainer" class="table-modern-container" style="display: none;">
+                <div class="table-wrapper">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th><span class="th-icon">🔑</span> Short Code</th>
+                                <th><span class="th-icon">🎯</span> Target URL</th>
+                                <th><span class="th-icon">👆</span> Clicks</th>
+                                <th><span class="th-icon">🕐</span> Last Clicked</th>
+                                <th><span class="th-icon">⚡</span> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="linksTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modern Footer -->
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">🔗</div>
+                    <p>TinyLink © 2024</p>
+                </div>
+                <div class="footer-links">
+                    <span>Built with ❤️ using Node.js & Express</span>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link">🐙</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/dashboard.js"></script>
+    <script>
+        // Advanced toggle
+        document.getElementById('advancedToggle').addEventListener('click', function() {
+            const options = document.getElementById('advancedOptions');
+            const icon = this.querySelector('.toggle-icon');
+            if (options.style.display === 'none') {
+                options.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                options.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        });
+
+        // Share button functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('#shareBtn')) {
+                const url = document.getElementById('shortLinkUrl').textContent;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Check out this link!',
+                        url: url
+                    });
+                } else {
+                    alert('Share: ' + url);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
